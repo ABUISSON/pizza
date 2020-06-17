@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>Cart</title>
+</head>
+<body>
+  <h1>Cart</h1>
+
+  Here is your cart :
+  <ul>
+    {% for pizza in Pizza%}
+    <li>{{ pizza }}</li>
+    {% endfor %}
+  </ul>
+
+  Total price : ${{ price }}
+
+  <a href="/payment/?price={{ price }}" > Proceed to Payment </a>
+
+</html>

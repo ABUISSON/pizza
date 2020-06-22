@@ -1,4 +1,8 @@
-{% block body %}
+{% extends "orders/layout.html" %}
+
+{% block title %}Your space{% endblock %}
+
+{% block content %}
 <h1>Hello, {{ user.first_name }}</h1>
 <ul>
     <li>Currently logged in as: {{ user.username }}</li>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'orders/style.css' %}">
+    <script src="{% static 'orders/navigation.js' %}"></script>
+
+  </head>
+  <body>
+<!-- Navigation -->
+  <ul id="navbar">
+    <li id="navitem" {% if "/cart" in request.path %}class="active"{% endif %}><a href="/cart">Cart</a></li>
+    <li id="navitem" {% if "/login" in request.path %}class="active"{% endif %}><a href="/login">Login</a></li>
+    <li id="navitem" {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
+    <li id="navitem" {% if "/menu" in request.path %}class="active"{% endif %}><a href="/menu">Menu</a></li>
+    <li id="navitem" {% if "/order" in request.path %}class="active"{% endif %}><a href="/order">Order</a></li>
+    <li id="navitem" {% if "/info" in request.path %}class="active"{% endif %}><a href="/info">Info</a></li>
+  </ul>
+
+  <div id="content">{% block content %}{{ active_page }}{% endblock %}</div>
+  <div id="footer">
+      {% block footer %}
+      &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+  </div>
+  </body>
+</html>

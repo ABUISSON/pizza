@@ -1,32 +1,31 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 
-from .utils import compute_price
+from .utils import compute_price, get_unique
 from .forms import OrderForm
-from .models import Topping, Pizza, Order
+from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon
 
-# Create your views here.
 def index(request):
-    context = {
-    "toppings" : Topping.objects.all()
-    }
-    return render(request, "orders/index.html", context)
+    return render(request, "orders/index.html",{})
+
+def menu(request):
+    plain_subs = Sub.objects.exclude(addons__isnull=False).order_by('main')
+
+    context = {"Pastas":Pasta.objects.all(),
+                "Salads":Salad.objects.all(),
+                "Subs": Sub_main.objects.all(),
+                "Sub_addons":Sub_addon.objects.all(),
+                "Toppings": Topping.objects.all()}
+    return render(request, "orders/menu.html",context)
+
+def info(request):
+    return render(request, "orders/info.html",{})
 
 def cart(request):
     order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
-    context = {"Pizza": [str(e) for e in order.food.all()],
+    context = {"Pizza": [str(e) for e in order.pizzas.all()],
     "price": compute_price(order)}
     return render(request, "orders/cart.html", context)
-
-# def order(request):
-#     pizza_type = request.POST["type-select"]
-#     pizza_size = request.POST["size-select"]
-#     toppings_list = []
-#     for top in request.POST["all_toppings"]:
-#         top_obj, created = Topping.objects.get_or_create(type=top)
-#         toppings_list.append(top_obj)
-#     pizza, created = Pizza.object.get_or_create(pizza_type=pizza_type,pizza_size=pizza_size, toppings=toppings_list)
-#     return render(request, "orders/cart.html")
 
 def pay(request):
     """This function takes to payment page"""
@@ -49,7 +48,7 @@ def get_order(request):
 
             #add to order or create
             order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
-            order.food.add(pizza)
+            order.pizzas.add(pizza)
             # redirect to a new URL:
             return HttpResponseRedirect('cart')
 
@@ -57,7 +56,7 @@ def get_order(request):
     else:
         form = OrderForm()
 
-    return render(request, 'orders/index.html', {'form': form})
+    return render(request, 'orders/order.html', {'form': form})
 
 
 def validate(request):
@@ -69,3 +68,10 @@ def validate(request):
     order.payment_status = True
     order.save()
     return render(request,'orders/thankyou.html',{"client": request.user})
+
+
+def monitor(request):
+    """Function to view admin monitoring"""
+    #IMPLEMENTER: checkez si la personne est logged en tant qu'admin
+    pending = Order.objects.filter(payment_status=True,delivered_status=False)
+    return render(request,'orders/admin.html',{"orders":pending})

@@ -1,9 +1,10 @@
 def compute_price(order):
     price = 0
-    for pizza in order.food.all():
+    for pizza in order.pizzas.all():
         price+=pizza_price(pizza)
     return price
 
+#à mettre dans la db
 PIZZA_PRICES = {
 "R":{
     "S":{0:12.7,1:13.7,2:15.2,3:16.2,4:17.75},
@@ -19,3 +20,8 @@ PIZZA_PRICES = {
 def pizza_price(pizza):
     k = min(4,len(pizza.toppings.all()))
     return PIZZA_PRICES[pizza.pizza_type][pizza.pizza_size][k]
+
+def get_unique(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]

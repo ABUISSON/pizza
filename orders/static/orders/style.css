@@ -1,0 +1,56 @@
+/* Utils */
+:root {
+  --dark-red-color: #C64646;
+  --beige-color : #FEFCF6;
+}
+
+/* Navbar */
+#navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#navitem {
+  float: left;
+}
+
+#navitem a {
+  display: block;
+  color: var(--dark-red-color);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+#navitem a:hover:not(.active) {
+  background-color: var(--beige-color);
+}
+
+.active {
+  background-color: var(--beige-color);
+}
+
+/* menu */
+
+.tab button {
+  background-color: var(--beige-color);
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}

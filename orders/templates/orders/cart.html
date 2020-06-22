@@ -1,19 +1,17 @@
-<html>
-<head>
-  <title>Cart</title>
-</head>
-<body>
-  <h1>Cart</h1>
+{% extends "orders/layout.html" %}
 
-  Here is your cart :
-  <ul>
-    {% for pizza in Pizza%}
-    <li>{{ pizza }}</li>
-    {% endfor %}
-  </ul>
+{% block title %}Cart{% endblock %}
+{% block content %}
+<h1>Cart</h1>
 
-  Total price : ${{ price }}
+Here is your cart :
+<ul>
+  {% for pizza in Pizza%}
+  <li>{{ pizza }}</li>
+  {% endfor %}
+</ul>
 
-  <a href="/payment/?price={{ price }}" > Proceed to Payment </a>
+Total price : ${{ price }}
 
-</html>
+<a href="/payment/?price={{ price }}" > Proceed to Payment </a>
+{% endblock %}

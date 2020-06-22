@@ -1,38 +1,11 @@
-<html>
-<head>
-  <title>Pizza</title>
-</head>
-<body>
-  <h1>Pizza</h1>
-  <form action="" method="post">
-      {% csrf_token %}
-      {{ form }}
-      <input type="submit" value="Submit">
-  </form>
-  <!-- <form class="" action="{% url 'order' %}" method="post">
-    {% csrf_token %}
-    Choose type :
-    <select name="type-select">
-      <option value="R">Regular</option>
-      <option value="S">Sicilian</option>
-    </select>
-    <br>
-    <br>
-    Choose size :
-    <select id="size-select">
-      <option value="S">Small</option>
-      <option value="L">Large</option>
-    </select>
-    <br>
-    <br>
-    Choose toppings :
-    <br>
-    {% for topping in toppings %}
-    <input type="checkbox" id="{{ topping }}" name="all_toppings[]" value="{{ topping }}">
-    <label for="{{ topping }}"> {{ topping }}</label><br>
-    {% endfor %}
-  <br>
-  <input type="submit" value="Add to cart">
-  </form> -->
-</body>
-</html>
+{% extends "orders/layout.html" %}
+
+{% block title %}Index{% endblock %}
+{% block content %}
+<h1>Pinocchio’s Pizza</h1>
+<div class="">
+  We have been feeding Harvard for over 50 years.
+  We sell award-winning sicilian-style pizza.
+  We are Pinocchio’s.
+</div>
+{% endblock %}

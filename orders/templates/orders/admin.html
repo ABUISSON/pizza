@@ -1,0 +1,12 @@
+{% extends "orders/layout.html" %}
+
+{% block title %}Admin{% endblock %}
+{% block content %}
+<h1>Admin view</h1>
+<ul>
+  {% for order in orders%}
+  <li>{{ order }}</li>
+  {% endfor %}
+</ul>
+</body>
+{% endblock %}

@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Thank you !</title>
-  </head>
-  <body>
-    Thank you {{ client }} ! Your order is on the way :)
+{% extends "orders/layout.html" %}
 
-    <a href="/">Retour</a>
-  </body>
-</html>
+{% block title %}Thank you!{% endblock %}
+{% block content %}
+<h1>Thank you!</h1>
+<div class="">
+  Thank you {{ client }} ! Your order is on the way :)
+  <a href="/">Retour</a>
+</div>
+{% endblock %}

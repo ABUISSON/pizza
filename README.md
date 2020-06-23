@@ -8,3 +8,4 @@ TODO :
 - gérer personnes non connectées
 - bloquer choix sub small Sausage, Pppers &Onions
 - empêcher doublons de plats avec prix différents
+- robustesse plusieurs fois même objet dans un panier ?

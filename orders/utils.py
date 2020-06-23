@@ -2,9 +2,11 @@ def compute_price(order):
     price = 0
     for pizza in order.pizzas.all():
         price+=pizza_price(pizza)
+    for salad in order.salads.all():
+        price+=float(salad.price)
     return price
 
-#à mettre dans la db
+#TODO à mettre dans la db
 PIZZA_PRICES = {
 "R":{
     "S":{0:12.7,1:13.7,2:15.2,3:16.2,4:17.75},

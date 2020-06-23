@@ -124,5 +124,11 @@ class Order(models.Model):
     plates = models.ManyToManyField(Plate)
     payment_status = models.BooleanField(default=False)
     delivered_status = models.BooleanField(default=False)
+
     def __str__(self):
-        return f"{self.client} paid : {self.payment_status}"
+        pizz_str = ", ".join(str(p) for p in self.pizzas.all())
+        subs_str = ", ".join(str(p) for p in self.subs.all())
+        pasta_str = ", ".join(str(p) for p in self.pastas.all())
+        salad_str = ", ".join(str(p) for p in self.salads.all())
+        plates_str = ", ".join(str(p) for p in self.plates.all())
+        return f"{self.client} paid : {self.payment_status} content : {pizz_str} \ {subs_str} \ {pasta_str} \ {salad_str} \ {plates_str}"

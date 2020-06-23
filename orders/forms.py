@@ -1,5 +1,5 @@
 from django import forms
-from .models import Topping
+from .models import Topping, Salad
 
 PIZZA_TYPES = (
 ('R','Regular'),
@@ -11,7 +11,10 @@ PIZZA_SIZES = (
 ('L','Large')
 )
 
-class OrderForm(forms.Form):
-    pizza_type = forms.ChoiceField(choices = PIZZA_TYPES, label="Pizza Type")
-    pizza_size = forms.ChoiceField(choices = PIZZA_SIZES, label="Pizza Size")
-    toppings = forms.ModelMultipleChoiceField(queryset = Topping.objects.all(), widget=forms.CheckboxSelectMultiple, required=True)
+class PizzaForm(forms.Form):
+    pizza_type = forms.ChoiceField(choices=PIZZA_TYPES, label="Pizza Type")
+    pizza_size = forms.ChoiceField(choices=PIZZA_SIZES, label="Pizza Size")
+    toppings = forms.ModelMultipleChoiceField(queryset = Topping.objects.all(), widget=forms.CheckboxSelectMultiple, required=True) #TODO: required=True, vraiment ?
+
+class SaladForm(forms.Form):
+    salad_type = forms.ModelChoiceField(queryset=Salad.objects.all(), label="Salad Type")

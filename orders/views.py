@@ -2,10 +2,15 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 
 from .utils import compute_price, get_unique
-from .forms import OrderForm
+from .forms import PizzaForm, SaladForm
 from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def index(request):
+    logger.warning("Here is the index")
     return render(request, "orders/index.html",{})
 
 def menu(request):
@@ -22,10 +27,11 @@ def info(request):
     return render(request, "orders/info.html",{})
 
 def cart(request):
+    """This function takes to cart page"""
     order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
-    context = {"Pizza": [str(e) for e in order.pizzas.all()],
+    context = {"order":order,
     "price": compute_price(order)}
-    return render(request, "orders/cart.html", context)
+    return render(request, "orders/cart.html", context) #"Pizza": [str(e) for e in order.pizzas.all()]
 
 def pay(request):
     """This function takes to payment page"""
@@ -33,16 +39,20 @@ def pay(request):
     return render(request, "orders/payment.html", context)
 
 def get_order(request):
-    # if this is a POST request we need to process the form data
+    pizza_form = PizzaForm()
+    salad_form = SaladForm()
+    return render(request, 'orders/order.html', {'pizza_form': pizza_form, 'salad_form': salad_form})
+
+def order_pizza(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = OrderForm(request.POST)
+        pizza_form = PizzaForm(request.POST)
         # check whether it's valid:
-        if form.is_valid():
+        if pizza_form.is_valid():
             # process the data in form.cleaned_data as required
-            pizza = Pizza.objects.create(pizza_type=form.cleaned_data['pizza_type'],pizza_size=form.cleaned_data['pizza_size'])
-            for top in form.cleaned_data['toppings']:
-                    top_obj, created = Topping.objects.get_or_create(type=top)
+            pizza = Pizza.objects.create(pizza_type=pizza_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
+            for top in pizza_form.cleaned_data['toppings']:
+                    top_obj = Topping.objects.get(type=top)
                     pizza.toppings.add(top_obj)
             pizza.save()
 
@@ -51,13 +61,27 @@ def get_order(request):
             order.pizzas.add(pizza)
             # redirect to a new URL:
             return HttpResponseRedirect('cart')
-
-    # if a GET (or any other method) we'll create a blank form
     else:
-        form = OrderForm()
+        print("Error") #TODO
 
-    return render(request, 'orders/order.html', {'form': form})
-
+def order_salad(request):
+    logger.warning("I am here")
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        salad_form = SaladForm(request.POST)
+        logger.warning("there")
+        # check whether it's valid:
+        if salad_form.is_valid():
+            logger.warning(salad_form.cleaned_data["salad_type"])
+            # process the data in form.cleaned_data as required
+            #salad =  #Salad.objects.get(type=salad_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
+            #add to order or create
+            order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
+            order.salads.add(salad_form.cleaned_data["salad_type"])
+            # redirect to a new URL:
+            return HttpResponseRedirect('cart')
+    else:
+        return render(request, 'orders/error.html') #TODO
 
 def validate(request):
     """This function take to thank you page"""

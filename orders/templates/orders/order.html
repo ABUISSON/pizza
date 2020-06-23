@@ -1,6 +1,7 @@
 {% extends "orders/layout.html" %}
 
 {% block title %}Order{% endblock %}
+
 {% block content %}
 <h1>Order</h1>
 
@@ -16,97 +17,32 @@
 
 <div id="Pizza" class="Menucontent">
   <h3>Pizza</h3>
-  <form action="" method="post">
-      {% csrf_token %}
-      {{ form }}
+  <form action="/order_pizza" method="post">
+    {% csrf_token %}
+    {{ pizza_form }}
       <input type="submit" value="Submit">
   </form>
 </div>
 
 <div id="Subs" class="Menucontent">
   <h3>Subs</h3>
-  <div class="">
-    <table style="width:50%">
-      <tr>
-        <th></th>
-        <th>Small</th>
-        <th>Large</th>
-      </tr>
-  {% for s in Subs %}
-      <tr>
-        <td>{{ s.name }}</td>
-        <td>{{ s.price_s }}</td>
-        <td>{{ s.price_l }}</td>
-      </tr>
-  {% endfor %}
-</table>
-  </div>
-  <h3>Add to your sandwich</h3>
-  <ul>
-    {% for s in Sub_addons %}
-    <li> {{ s.type }} + $ {{ s.price }}</li>
-    {% endfor %}
-  </ul>
+
 </div>
 
 <div id="Pasta" class="Menucontent">
   <h3>Pasta</h3>
-  <ul>
-    {% for pasta in Pastas %}
-    <li>{{ pasta.type }} at $ {{ pasta.price }}</li>
-    {% endfor %}
-  </ul>
 </div>
 
 <div id="Salads" class="Menucontent">
   <h3>Salads</h3>
-  <ul>
-    {% for salad in Salads %}
-    <li>{{ salad.type }} at $ {{ salad.price }}</li>
-    {% endfor %}
-  </ul>
+  <form action="/order_salad" method="post">
+    {% csrf_token %}
+    {{ salad_form }}
+      <input type="submit" value="Submit">
+  </form>
 </div>
 
 <div id="Platter" class="Menucontent">
   <h3>Platter</h3>
-  <div class="">
-    <table style="width:50%">
-  <tr>
-    <th></th>
-    <th>Small</th>
-    <th>Large</th>
-  </tr>
-  <tr>
-    <td>Garden Salad</td>
-    <td>$40.00</td>
-    <td>$65.00</td>
-  </tr>
-  <tr>
-    <td>Greek Salad</td>
-    <td>$50.00</td>
-    <td>$75.00</td>
-  </tr>
-  <tr>
-    <td>Antipasto</td>
-    <td>$50.00</td>
-    <td>$75.00</td>
-  </tr>
-  <tr>
-    <td>Baked Ziti</td>
-    <td>$40.00</td>
-    <td>$65.00</td>
-  </tr>
-  <tr>
-    <td>Meatball Parm</td>
-    <td>$50.00</td>
-    <td>$75.00</td>
-  </tr>
-  <tr>
-    <td>Chicken Parm</td>
-    <td>$55.00</td>
-    <td>$85.00</td>
-  </tr>
-</table>
-  </div>
 </div>
 {% endblock %}

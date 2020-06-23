@@ -5,13 +5,14 @@
 <h1>Cart</h1>
 
 Here is your cart :
-<ul>
-  {% for pizza in Pizza%}
-  <li>{{ pizza }}</li>
-  {% endfor %}
-</ul>
-
+{{ order }}
+<br>
+<br>
 Total price : ${{ price }}
-
+<br>
+<br>
+<a href="/order" > Continue order </a>
+<br>
+<br>
 <a href="/payment/?price={{ price }}" > Proceed to Payment </a>
 {% endblock %}

@@ -5,7 +5,11 @@
 <h1>Admin view</h1>
 <ul>
   {% for order in orders%}
-  <li>{{ order }}</li>
+    <li>{{ order }}</li>
+    <form action="{% url 'orders:done' order.pk %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="Mark as completed">
+    </form>
   {% endfor %}
 </ul>
 </body>

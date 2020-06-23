@@ -1,9 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .utils import compute_price, get_unique
 from .forms import PizzaForm, SaladForm
-from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon
+from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, SaladOrder, PizzaPrice
 
 import logging
 
@@ -14,9 +14,28 @@ def index(request):
     return render(request, "orders/index.html",{})
 
 def menu(request):
+    #data on subs
     plain_subs = Sub.objects.exclude(addons__isnull=False).order_by('main')
+    #data on pizzas
+    regular_prices={}
+    for n_tops in range(5):
+        regular_prices[n_tops] = []
+        for size in ['S','L']:
+              p = PizzaPrice.objects.get(pizza_type='R',pizza_size=size,n_tops=n_tops).price
+              #TODO ajouter des choses pour vérifier que ça se passe bien (requete existe et unique)
+              regular_prices[n_tops].append(p)
+    sicilian_prices={}
+    for n_tops in range(5):
+        sicilian_prices[n_tops] = []
+        for size in ['S','L']:
+              p = PizzaPrice.objects.get(pizza_type='S',pizza_size=size,n_tops=n_tops).price
+              #TODO ajouter des choses pour vérifier que ça se passe bien
+              sicilian_prices[n_tops].append(p)
 
     context = {"Pastas":Pasta.objects.all(),
+                'Pizza_header':['', 'Small','Large'],
+                'R_rows':regular_prices,
+                'S_rows':sicilian_prices,
                 "Salads":Salad.objects.all(),
                 "Subs": Sub_main.objects.all(),
                 "Sub_addons":Sub_addon.objects.all(),
@@ -28,15 +47,28 @@ def info(request):
 
 def cart(request):
     """This function takes to cart page"""
-    order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
-    context = {"order":order,
-    "price": compute_price(order)}
-    return render(request, "orders/cart.html", context) #"Pizza": [str(e) for e in order.pizzas.all()]
+    if request.user.is_authenticated:
+        order, created = Order.objects.get_or_create(client=request.user,payment_status=False) #TODO doit-on garder ces create ?
+        context = {"order":order,
+        "price": compute_price(order)}
+    else:
+        if 'order_id' in request.session:
+            order = Order.objects.get(pk=request.session['order_id'])
+            context = {"order":order,
+            "price": compute_price(order)}
+        else:
+            context = {"order":"No order yet",
+                        "price":0}
+    return render(request, "orders/cart.html", context)
 
 def pay(request):
     """This function takes to payment page"""
-    context = {"price":request.GET.get('price')}
-    return render(request, "orders/payment.html", context)
+    if request.user.is_authenticated:
+        context = {"price":request.GET.get('price')}
+        return render(request, "orders/payment.html", context)
+    else:
+        request.session['order_finished'] = True
+        return render(request, "users/login.html", {"message": "Log in to validate your order"})
 
 def get_order(request):
     pizza_form = PizzaForm()
@@ -57,12 +89,23 @@ def order_pizza(request):
             pizza.save()
 
             #add to order or create
-            order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
+            if request.user.is_authenticated:
+                order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
+            else:
+                if 'order_id' in request.session:
+                    pk = request.session['order_id']
+                    order = Order.objects.get(pk=pk)
+                else:
+                    order = Order(payment_status=False)
+                    order.save()
+                    request.session['order_id']=order.pk
             order.pizzas.add(pizza)
             # redirect to a new URL:
             return HttpResponseRedirect('cart')
+        else:
+            pass #TODO
     else:
-        print("Error") #TODO
+        logger.warning("Error") #TODO
 
 def order_salad(request):
     logger.warning("I am here")
@@ -77,7 +120,9 @@ def order_salad(request):
             #salad =  #Salad.objects.get(type=salad_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
             #add to order or create
             order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
-            order.salads.add(salad_form.cleaned_data["salad_type"])
+            #order.salads.add(salad_form.cleaned_data["salad_type"])
+            s = SaladOrder(salad=salad_form.cleaned_data["salad_type"], order=order)
+            s.save()
             # redirect to a new URL:
             return HttpResponseRedirect('cart')
     else:
@@ -97,5 +142,14 @@ def validate(request):
 def monitor(request):
     """Function to view admin monitoring"""
     #IMPLEMENTER: checkez si la personne est logged en tant qu'admin
+    pending = Order.objects.filter(payment_status=True,delivered_status=False)
+    return render(request,'orders/admin.html',{"orders":pending})
+
+def done(request,pk):
+    """ Function to set orders to completed """
+    order = get_object_or_404(Order,pk=pk)
+    if request.method == 'POST':
+        order.delivered_status = True
+        order.save()
     pending = Order.objects.filter(payment_status=True,delivered_status=False)
     return render(request,'orders/admin.html',{"orders":pending})

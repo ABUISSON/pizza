@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from orders.models import Order
 # Create your views here.
 
 def index(request):
@@ -19,6 +20,13 @@ def login_view(request):
   user = authenticate(request, username=username, password=password)
   if user is not None:
       login(request, user)
+      if 'order_id' in request.session:
+          pk = request.session['order_id']
+          order = Order.objects.get(pk=pk)
+          order.client = request.user
+          order.save()
+          if 'order_finished' in request.session:
+              return HttpResponseRedirect("cart")
       return HttpResponseRedirect(reverse("index"))
   else:
       return render(request, "users/login.html", {"message": "Invalid credentials."})

@@ -94,6 +94,13 @@ class Salad(models.Model):
     def __str__(self):
         return f"{self.type}"
 
+
+class SaladOrder(models.Model):
+    salad = models.ForeignKey(Salad, on_delete=models.CASCADE)
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.type}"
+
 ############
 ## PLATES ##
 ############
@@ -114,13 +121,12 @@ class Plate(models.Model):
 ############
 
 class Order(models.Model):
-    #Ajouter un timestamp
-    client = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    #food = models.ManyToManyField(Pizza)
+    #TODO Ajouter un timestamp
+    client = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True)
     pizzas = models.ManyToManyField(Pizza)
     subs = models.ManyToManyField(Sub)
     pastas = models.ManyToManyField(Pasta)
-    salads = models.ManyToManyField(Salad)
+    salads = models.ManyToManyField(Salad, through=SaladOrder)
     plates = models.ManyToManyField(Plate)
     payment_status = models.BooleanField(default=False)
     delivered_status = models.BooleanField(default=False)

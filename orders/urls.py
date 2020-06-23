@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+app_name="orders"
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("menu", views.menu, name="menu"),
@@ -12,5 +14,6 @@ urlpatterns = [
     path("validate_payment",views.validate, name="validate"),
     path("monitor", views.monitor, name="monitor"),
     path("order_pizza", views.order_pizza, name="order_pizza"),
-    path("order_salad", views.order_salad, name="order_salad")
+    path("order_salad", views.order_salad, name="order_salad"),
+    path(r'^done/(?P<pk>[0-9]+)/$', views.done, name='done')
 ]

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
-
+// TODO rouvrir la dernière tab
 function choose_tab(food){
   document.querySelectorAll(".Menucontent").forEach(
     content => {

@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 def compute_price(order):
     price = 0
     for pizza in order.pizzas.all():
-        price+=pizza_price(pizza)
+        price+=float(pizza_price(pizza))
     for salad in order.salads.all():
         price+=float(salad.price)
     return price

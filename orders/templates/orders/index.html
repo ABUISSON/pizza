@@ -2,10 +2,25 @@
 
 {% block title %}Index{% endblock %}
 {% block content %}
-<h1>Pinocchio’s Pizza</h1>
-<div class="">
-  We have been feeding Harvard for over 50 years.
-  We sell award-winning sicilian-style pizza.
-  We are Pinocchio’s.
+
+<div class="container">
+  <div class="row">
+    <h1 id="title">Pinocchio’s Pizza</h1>
+  </div>
+  <div class="row">
+    <p id="text_index">We have been feeding Harvard for over 50 years.</p>
+  </div>
+  <div class="row">
+    <p id="text_index">We sell award-winning sicilian-style pizza.
+    </p>
+  </div>
+  <div class="row">
+    <p id="text_index" style="margin-bottom:30px">We are Pinocchio’s.</p>
+  </div>
+
+  <div class="row">
+      <a href="/order" class="try_it index">Order now!</a>
+  </div>
 </div>
+
 {% endblock %}

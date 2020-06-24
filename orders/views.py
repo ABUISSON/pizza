@@ -10,7 +10,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 def index(request):
-    logger.warning("Here is the index")
     return render(request, "orders/index.html",{})
 
 def menu(request):

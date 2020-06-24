@@ -1,27 +1,57 @@
 /* Utils */
 :root {
-  --dark-red-color: #C64646;
+  --dark-red-color: #A53E40;
   --beige-color : #FEFCF6;
 }
 
+* {
+    font-family: 'Raleway';
+  }
+
+body {
+  background: url('/static/img/background.png');
+  /* position: relative;
+  width: 16130px;
+  height: 9000px; */
+  /* opacity: 0.5; */
+}
+
 /* Navbar */
+.table {
+	display: table;   /* Allow the centering to work */
+	margin: 0 auto;
+}
+
 #navbar {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
+  text-align: center;
 }
 
 #navitem {
   float: left;
 }
 
+#navitem li {
+  display: inline-block;
+}
+
 #navitem a {
   display: block;
   color: var(--dark-red-color);
   text-align: center;
-  padding: 14px 16px;
+  padding: 14px 30px;
   text-decoration: none;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: bold;
+  font-size: 40px;
+  line-height: 53px;
+  display: flex;
+  align-items: center;
+  min-width: 140px;
 }
 
 #navitem a:hover:not(.active) {
@@ -30,6 +60,78 @@
 
 .active {
   background-color: var(--beige-color);
+}
+
+/* Btn Try It */
+
+.try_it {
+	box-shadow: 3px 4px 9px 0px #8a2a21;
+	/* background:linear-gradient(to bottom, var(--dark-red-color) 5%, #f24437 100%); */
+	background-color:#C64646;
+	border-radius:9px;
+	border:1px solid var(--dark-red-color);
+	display:inline-block;
+	cursor:pointer;
+	color:var(--beige-color);
+	font-family:'Raleway';
+	font-size:17px;
+	padding:6px 20px;
+	text-decoration:none;
+	text-shadow:0px 0px 0px #810e05;
+  align-items: center;
+  margin-top: 20px
+}
+.try_it:hover {
+	background:linear-gradient(to bottom, #C64646 5%, var(--dark-red-color) 100%);
+	background-color:var(--dark-red-color);
+  color:var(--beige-color);
+}
+.try_it:active {
+	position:relative;
+	top:1px;
+}
+/* cart */
+
+#cart_icon{
+  font-size:36px;
+  color:#3E55A5;
+  margin-top: 20px
+}
+
+/* login */
+
+#login_link{
+  font-size:16px;
+  color:#3E55A5;
+  line-height: 92px;
+}
+
+
+/* index */
+
+
+#title{
+  font-family:'Rye';
+  font-size:50px;
+  margin:auto;
+  vertical-align:middle;
+  margin-top: 60px;
+  margin-bottom: 80px;
+}
+
+#text_index{
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 24px;
+  font-weight: 600;
+  width: 18em;
+  line-height: 24px
+}
+
+.index {
+  margin-left: auto;
+  margin-right: auto;
+  font-size:24px;
 }
 
 /* menu */

@@ -5,27 +5,45 @@
     <title>{% block title %}{% endblock %}</title>
 
     {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Rye&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'orders/style.css' %}">
     <script src="{% static 'orders/navigation.js' %}"></script>
 
   </head>
   <body>
 <!-- Navigation -->
-  <ul id="navbar">
-    <li id="navitem" {% if "/cart" in request.path %}class="active"{% endif %}><a href="/cart">Cart</a></li>
-    <li id="navitem" {% if "/login" in request.path %}class="active"{% endif %}><a href="/login">Login</a></li>
-    <li id="navitem" {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
-    <li id="navitem" {% if "/menu" in request.path %}class="active"{% endif %}><a href="/menu">Menu</a></li>
-    <li id="navitem" {% if "/order" in request.path %}class="active"{% endif %}><a href="/order">Order</a></li>
-    <li id="navitem" {% if "/info" in request.path %}class="active"{% endif %}><a href="/info">Info</a></li>
-  </ul>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-1">
+      <a href="/cart"><i class="fa fa-shopping-cart" id="cart_icon"></i></a>
+    </div>
+    <div class="col-sm-1">
+      <a href="/login" id="login_link">Login</a>
+    </div>
+    <div class="col-sm-8">
+        <ul id="navbar">
+          <!-- <li id="navitem" {% if "/cart" in request.path %}class="active"{% endif %}><a href="/cart">Cart</a></li>
+          <li id="navitem" {% if "/login" in request.path %}class="active"{% endif %}><a href="/login">Login</a></li> -->
+          <li id="navitem" {% if request.path == "/" %}class="active"{% endif %}><a href="/">Home</a></li>
+          <li id="navitem" {% if "/menu" in request.path %}class="active"{% endif %}><a href="/menu">Menu</a></li>
+          <li id="navitem" {% if "/order" in request.path %}class="active"{% endif %}><a href="/order">Order</a></li>
+          <li id="navitem" {% if "/info" in request.path %}class="active"{% endif %}><a href="/info">Info</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-2">
+      <a href="/order" class="try_it">Try it now!</a>
+    </div>
+  </div>
 
+</div>
   <div id="content">{% block content %}{{ active_page }}{% endblock %}</div>
   <br>
   <br>
   <div id="footer">
       {% block footer %}
-      &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.
+      &copy; Copyright 2020 by <a href="mailto:arnaud.buisson@hec.edu">BSN</a>.
       {% endblock %}
   </div>
   </body>

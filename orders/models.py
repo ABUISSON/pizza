@@ -99,7 +99,7 @@ class SaladOrder(models.Model):
     salad = models.ForeignKey(Salad, on_delete=models.CASCADE)
     order = models.ForeignKey('Order', on_delete=models.CASCADE)
     def __str__(self):
-        return f"{self.type}"
+        return f"{self.salad}"
 
 ############
 ## PLATES ##

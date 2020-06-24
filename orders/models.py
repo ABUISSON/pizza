@@ -131,6 +131,14 @@ class Order(models.Model):
     payment_status = models.BooleanField(default=False)
     delivered_status = models.BooleanField(default=False)
 
+    def get_order_size(self):
+        n_piz = self.pizzas.count()
+        n_sub = self.subs.count()
+        n_pas = self.pastas.count()
+        n_sal = self.salads.count()
+        n_pla = self.plates.count()
+        return n_piz+n_sub+n_pas+n_sal+n_pla
+        
     def __str__(self):
         pizz_str = ", ".join(str(p) for p in self.pizzas.all())
         subs_str = ", ".join(str(p) for p in self.subs.all())

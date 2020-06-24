@@ -5,6 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+#TODO placer prochaine fonction en attribut du modèle Order
 def compute_price(order):
     price = 0
     for pizza in order.pizzas.all():

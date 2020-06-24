@@ -9,7 +9,7 @@
   }
 
 body {
-  background: url('/static/img/background.png');
+  background: url('/static/img/background.png') no-repeat fixed;
   /* position: relative;
   width: 16130px;
   height: 9000px; */
@@ -62,6 +62,35 @@ body {
   background-color: var(--beige-color);
 }
 
+/* cart */
+.badge {
+  padding-left: 9px;
+  padding-right: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+  margin-top: 20px
+}
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #A53E40;
+}
+#lblCartCount {
+    font-size: 12px;
+    background: #ff0000;
+    color: #fff;
+    padding: 0 5px;
+    vertical-align: top;
+    margin-left: -10px;
+}
+
+#cart_icon{
+  font-size:36px;
+  color:#3E55A5;
+  margin-top: 20px
+}
+
 /* Btn Try It */
 
 .try_it {
@@ -90,13 +119,7 @@ body {
 	position:relative;
 	top:1px;
 }
-/* cart */
 
-#cart_icon{
-  font-size:36px;
-  color:#3E55A5;
-  margin-top: 20px
-}
 
 /* login */
 

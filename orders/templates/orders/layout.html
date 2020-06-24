@@ -17,10 +17,10 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-1">
-      <a href="/cart"><i class="fa fa-shopping-cart" id="cart_icon"></i></a>
+      <a href="/cart"><i class="fa fa-shopping-cart" id="cart_icon"></i>{% if cart_isfull %} <span class='badge badge-warning' id='lblCartCount'>{{n_cart}}</span>{% endif %}</a>
     </div>
     <div class="col-sm-1">
-      <a href="/login" id="login_link">Login</a>
+      <a href="/login" id="login_link">{% if request.user.is_authenticated %} Logout {% else %} Login {% endif %}</a>
     </div>
     <div class="col-sm-8">
         <ul id="navbar">

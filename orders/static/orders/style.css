@@ -167,15 +167,60 @@ body {
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
-  font-size: 17px;
+  border-radius:8px;
+  width: 130px;
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #ddd;
+  background-color: #e5e3dc;
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #ccc;
+  background-color: #e5e3dc;
+}
+
+.fond{
+  background-color: var(--beige-color);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  min-height: 80px;
+  margin: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+.tablink{
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  display:inline-block;
+  font-size: 24px;
+}
+
+.menu_title{
+  font-weight: bold;
+  margin:15px;
+}
+
+.toppings_list{
+  margin: 0 auto;
+  text-align: center;
+  columns: 5;
+  list-style-type: none;
+}
+
+.toppings_list li {
+    margin-bottom: 10px;
+    vertical-align: top;
 }

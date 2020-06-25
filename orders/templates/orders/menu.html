@@ -3,155 +3,194 @@
 {% block title %}Menu{% endblock %}
 
 {% block content %}
-<h1>Menu</h1>
 
-<div id="tab">
-  <button class="tablink active">Pizza</button>
-  <button class="tablink">Subs</button>
-  <button class="tablink">Pasta</button>
-  <button class="tablink">Salads</button>
-  <button class="tablink">Platter</button>
-</div>
-
-<div id="Pizza" class="Menucontent">
-  <h3>Pizza</h3>
-  <div class="">
-  <h4>Regular pizza</h4>
-  <table class="table">
-      <thead>
-          <tr>
-              {% for k in Pizza_header %}
-              <th>{{k}}</th>
-              {% endfor %}
-          </tr>
-      </thead>
-      <tbody>
-          {% for k,v in R_rows.items %}
-              <tr>
-                  <td>{{k}} toppings</td>
-                  {% for e in v %}
-                      <td>{{e}}</td>
+<div class="container">
+  <div class="row fond tab">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-2">
+      <button class="tablink active">Pizza</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Subs</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Pasta</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Salads</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Platter</button>
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+  <div class="fond">
+    <div id="Pizza" class="Menucontent">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <h4 class="menu_title">Regular pizza</h4>
+              <table class="table table_menu">
+                <thead>
+                  <tr>
+                    {% for k in Pizza_header %}
+                    <th>{{k}}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for k,v in R_rows.items %}
+                  <tr>
+                    <td>{% if k == 0 %}Cheese{% elif k == 1 %}1 topping{% elif k == 4%} Special {% else %}{{k}} toppings{% endif %}</td>
+                    {% for e in v %}
+                    <td>${{e}}</td>
+                    {% endfor %}
+                  </tr>
                   {% endfor %}
-              </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-  </div>
-  <div class="">
-  <h4>Sicilian pizza</h4>
-  <table class="table">
-      <thead>
-          <tr>
-              {% for k in Pizza_header %}
-              <th>{{k}}</th>
-              {% endfor %}
-          </tr>
-      </thead>
-      <tbody>
-          {% for k,v in S_rows.items %}
-              <tr>
-                  <td>{{k}} toppings</td>
-                  {% for e in v %}
-                      <td>{{e}}</td>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <h4 class="menu_title">Sicilian pizza</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    {% for k in Pizza_header %}
+                    <th>{{k}}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for k,v in S_rows.items %}
+                  <tr>
+                    <td>{% if k == 0 %}Cheese{% elif k == 1 %}1 topping{% elif k == 4%} Special {% else %}{{k}} toppings{% endif %}</td>
+                    {% for e in v %}
+                    <td>${{e}}</td>
+                    {% endfor %}
+                  </tr>
                   {% endfor %}
-              </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-  </div>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="menu_title">Our toppings</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="toppings_list">
+            {% for t in Toppings %}
+            <li> {{ t.type }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  <h3>Our toppings</h3>
-  <ul>
-    {% for t in Toppings %}
-    <li> {{ t.type }}</li>
-    {% endfor %}
-  </ul>
-</div>
+    <div id="Subs" class="Menucontent">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="menu_title">Subs</h4>
+        </div>
+        <div class="col-md-6">
+          <h4 class="menu_title">Add to your sandwich</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <table>
+            <tr>
+              <th></th>
+              <th>Small</th>
+              <th>Large</th>
+            </tr>
+            {% for s in Subs %}
+            <tr>
+              <td>{{ s.name }}</td>
+              <td>{{ s.price_s }}</td>
+              <td>{{ s.price_l }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <div class="col-md-6">
 
-<div id="Subs" class="Menucontent">
-  <h3>Subs</h3>
-  <div class="">
-    <table style="width:50%">
-      <tr>
-        <th></th>
-        <th>Small</th>
-        <th>Large</th>
-      </tr>
-  {% for s in Subs %}
-      <tr>
-        <td>{{ s.name }}</td>
-        <td>{{ s.price_s }}</td>
-        <td>{{ s.price_l }}</td>
-      </tr>
-  {% endfor %}
-</table>
-  </div>
-  <h3>Add to your sandwich</h3>
-  <ul>
-    {% for s in Sub_addons %}
-    <li> {{ s.type }} + $ {{ s.price }}</li>
-    {% endfor %}
-  </ul>
-</div>
+          <ul>
+            {% for s in Sub_addons %}
+            <li> {{ s.type }} + $ {{ s.price }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
 
-<div id="Pasta" class="Menucontent">
-  <h3>Pasta</h3>
-  <ul>
-    {% for pasta in Pastas %}
-    <li>{{ pasta.type }} at $ {{ pasta.price }}</li>
-    {% endfor %}
-  </ul>
-</div>
+    <div id="Pasta" class="Menucontent">
+      <h4 class="menu_title">Pasta</h4>
+      <ul>
+        {% for pasta in Pastas %}
+        <li>{{ pasta.type }} at $ {{ pasta.price }}</li>
+        {% endfor %}
+      </ul>
+    </div>
 
-<div id="Salads" class="Menucontent">
-  <h3>Salads</h3>
-  <ul>
-    {% for salad in Salads %}
-    <li>{{ salad.type }} at $ {{ salad.price }}</li>
-    {% endfor %}
-  </ul>
-</div>
+    <div id="Salads" class="Menucontent">
+      <h4 class="menu_title">Salads</h4>
+      <ul>
+        {% for salad in Salads %}
+        <li>{{ salad.type }} at $ {{ salad.price }}</li>
+        {% endfor %}
+      </ul>
+    </div>
 
-<div id="Platter" class="Menucontent">
-  <h3>Platter</h3>
-  <div class="">
-    <table style="width:50%">
-  <tr>
-    <th></th>
-    <th>Small</th>
-    <th>Large</th>
-  </tr>
-  <tr>
-    <td>Garden Salad</td>
-    <td>$40.00</td>
-    <td>$65.00</td>
-  </tr>
-  <tr>
-    <td>Greek Salad</td>
-    <td>$50.00</td>
-    <td>$75.00</td>
-  </tr>
-  <tr>
-    <td>Antipasto</td>
-    <td>$50.00</td>
-    <td>$75.00</td>
-  </tr>
-  <tr>
-    <td>Baked Ziti</td>
-    <td>$40.00</td>
-    <td>$65.00</td>
-  </tr>
-  <tr>
-    <td>Meatball Parm</td>
-    <td>$50.00</td>
-    <td>$75.00</td>
-  </tr>
-  <tr>
-    <td>Chicken Parm</td>
-    <td>$55.00</td>
-    <td>$85.00</td>
-  </tr>
-</table>
+    <div id="Platter" class="Menucontent">
+      <h4 class="menu_title">Platter</h4>
+      <div class="">
+        <table style="width:50%">
+          <tr>
+            <th></th>
+            <th>small</th>
+            <th>Large</th>
+          </tr>
+          <tr>
+            <td>Garden Salad</td>
+            <td>$40.00</td>
+            <td>$65.00</td>
+          </tr>
+          <tr>
+            <td>Greek Salad</td>
+            <td>$50.00</td>
+            <td>$75.00</td>
+          </tr>
+          <tr>
+            <td>Antipasto</td>
+            <td>$50.00</td>
+            <td>$75.00</td>
+          </tr>
+          <tr>
+            <td>Baked Ziti</td>
+            <td>$40.00</td>
+            <td>$65.00</td>
+          </tr>
+          <tr>
+            <td>Meatball Parm</td>
+            <td>$50.00</td>
+            <td>$75.00</td>
+          </tr>
+          <tr>
+            <td>Chicken Parm</td>
+            <td>$55.00</td>
+            <td>$85.00</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

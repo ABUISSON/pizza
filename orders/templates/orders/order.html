@@ -31,6 +31,11 @@
 
 <div id="Pasta" class="Menucontent">
   <h3>Pasta</h3>
+  <form action="/order_pasta" method="post">
+    {% csrf_token %}
+    {{ pasta_form }}
+      <input type="submit" value="Submit">
+  </form>
 </div>
 
 <div id="Salads" class="Menucontent">

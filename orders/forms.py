@@ -1,5 +1,5 @@
 from django import forms
-from .models import Topping, Salad
+from .models import Topping, Salad, Pasta
 
 PIZZA_TYPES = (
 ('R','Regular'),
@@ -18,3 +18,6 @@ class PizzaForm(forms.Form):
 
 class SaladForm(forms.Form):
     salad_type = forms.ModelChoiceField(queryset=Salad.objects.all(), label="Salad Type")
+
+class PastaForm(forms.Form):
+    pasta_type = forms.ModelChoiceField(queryset=Pasta.objects.all(), label="Pasta Type")

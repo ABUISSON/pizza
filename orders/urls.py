@@ -15,5 +15,6 @@ urlpatterns = [
     path("monitor", views.monitor, name="monitor"),
     path("order_pizza", views.order_pizza, name="order_pizza"),
     path("order_salad", views.order_salad, name="order_salad"),
+    path("order_pasta", views.order_pasta, name="order_pasta"),
     path(r'^done/(?P<pk>[0-9]+)/$', views.done, name='done')
 ]

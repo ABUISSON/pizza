@@ -2,8 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 
 from .utils import compute_price, get_unique
-from .forms import PizzaForm, SaladForm
-from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, SaladOrder, PizzaPrice
+from .forms import PizzaForm, SaladForm, PastaForm
+from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, SaladOrder, PizzaPrice, PastaOrder
 
 import logging
 
@@ -72,7 +72,10 @@ def pay(request):
 def get_order(request):
     pizza_form = PizzaForm()
     salad_form = SaladForm()
-    return render(request, 'orders/order.html', {'pizza_form': pizza_form, 'salad_form': salad_form})
+    pasta_form = PastaForm()
+    return render(request, 'orders/order.html',
+            {'pizza_form': pizza_form, 'salad_form': salad_form,
+             'pasta_form': pasta_form})
 
 def order_pizza(request):
     if request.method == 'POST':
@@ -126,6 +129,27 @@ def order_salad(request):
             return HttpResponseRedirect('cart')
     else:
         return render(request, 'orders/error.html') #TODO
+
+def order_pasta(request):
+    logger.warning("I am in order_pasta")
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        pasta_form = PastaForm(request.POST)
+        logger.warning("there")
+        # check whether it's valid:
+        if pasta_form.is_valid():
+            logger.warning(pasta_form.cleaned_data["pasta_type"])
+            # process the data in form.cleaned_data as required
+            #salad =  #Salad.objects.get(type=salad_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
+            #add to order or create
+            order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
+            p = PastaOrder(pasta=pasta_form.cleaned_data["pasta_type"], order=order)
+            p.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('cart')
+    else:
+        return render(request, 'orders/error.html') #TODO
+
 
 def validate(request):
     """This function take to thank you page"""

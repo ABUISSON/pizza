@@ -84,6 +84,16 @@ class Pasta(models.Model):
     def __str__(self):
         return f"{self.type}"
 
+class PastaOrder(models.Model):
+    """
+    Additional table for the many-to-many relation between Pasta and Order
+    objects
+    """
+    pasta = models.ForeignKey(Pasta, on_delete=models.CASCADE)
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.pasta}"
+
 ############
 ## SALADS ###
 ############
@@ -125,7 +135,7 @@ class Order(models.Model):
     client = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True)
     pizzas = models.ManyToManyField(Pizza)
     subs = models.ManyToManyField(Sub)
-    pastas = models.ManyToManyField(Pasta)
+    pastas = models.ManyToManyField(Pasta, through=PastaOrder)
     salads = models.ManyToManyField(Salad, through=SaladOrder)
     plates = models.ManyToManyField(Plate)
     payment_status = models.BooleanField(default=False)
@@ -138,7 +148,7 @@ class Order(models.Model):
         n_sal = self.salads.count()
         n_pla = self.plates.count()
         return n_piz+n_sub+n_pas+n_sal+n_pla
-        
+
     def __str__(self):
         pizz_str = ", ".join(str(p) for p in self.pizzas.all())
         subs_str = ", ".join(str(p) for p in self.subs.all())

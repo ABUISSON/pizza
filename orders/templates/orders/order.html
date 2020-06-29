@@ -3,46 +3,83 @@
 {% block title %}Order{% endblock %}
 
 {% block content %}
-<h1>Order</h1>
+<div class="container">
+  <div class="row fond tab">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-2">
+      <button class="tablink active">Pizza</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Subs</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Pasta</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Salads</button>
+    </div>
+    <div class="col-md-2">
+      <button class="tablink">Platter</button>
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
 
-<div id="tab">
-  <button class="tablink active" onlick="openTab(event,'PizzaM')"">Pizza</button>
-  <button class="tablink" onlick="openTab(event,'SubsM')">Subs</button>
-  <button class="tablink" onlick="openTab(event,'PastaM')">Pasta</button>
-  <button class="tablink" onlick="openTab(event,'SaladsM')">Salads</button>
-  <button class="tablink" onlick="openTab(event,'PlatterM')">Platter</button>
-</div>
 
+  <div class="fond">
+    <div id="Pizza" class="Menucontent">
+      <form action="/order_pizza" method="post">
+        {% csrf_token %}
+        {{ pizza_form.non_field_errors }}
+        <div class="row">
+          <div class="col-md-4 fieldWrapper">
+              {{ pizza_form.pizza_type.errors }}
+              <label for="{{ pizza_form.pizza_type.id_for_label }}">Pizza type:</label>
+              {{ pizza_form.pizza_type }}
+          </div>
+          <div class="col-md-4 fieldWrapper">
+              {{ pizza_form.pizza_size.errors }}
+              <label for="{{ pizza_form.pizza_size.id_for_label }}">Pizza size:</label>
+              {{ pizza_form.pizza_size }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="fieldWrapper">
+              {{ pizza_form.toppings.errors }}
+              <label for="{{ pizza_form.toppings.id_for_label }}">Choix de toppings: </label>
+              {{ pizza_form.toppings }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <input class="try_it" type="submit" value="Add to cart">
+          </div>
+        </div>
+      </form>
+    </div>
 
+    <div id="Subs" class="Menucontent">
+      <h3>Subs</h3>
 
-<div id="Pizza" class="Menucontent">
-  <h3>Pizza</h3>
-  <form action="/order_pizza" method="post">
-    {% csrf_token %}
-    {{ pizza_form }}
-      <input type="submit" value="Submit">
-  </form>
-</div>
+    </div>
 
-<div id="Subs" class="Menucontent">
-  <h3>Subs</h3>
+    <div id="Pasta" class="Menucontent">
+      <h3>Pasta</h3>
+    </div>
 
-</div>
+    <div id="Salads" class="Menucontent">
+      <h3>Salads</h3>
+      <form action="/order_salad" method="post">
+        {% csrf_token %}
+        {{ salad_form }}
+        <input type="submit" value="Submit">
+      </form>
+    </div>
 
-<div id="Pasta" class="Menucontent">
-  <h3>Pasta</h3>
-</div>
-
-<div id="Salads" class="Menucontent">
-  <h3>Salads</h3>
-  <form action="/order_salad" method="post">
-    {% csrf_token %}
-    {{ salad_form }}
-      <input type="submit" value="Submit">
-  </form>
-</div>
-
-<div id="Platter" class="Menucontent">
-  <h3>Platter</h3>
+    <div id="Platter" class="Menucontent">
+      <h3>Platter</h3>
+    </div>
+  </div>
 </div>
 {% endblock %}

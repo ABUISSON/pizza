@@ -70,7 +70,7 @@ def pay(request):
         return render(request, "users/login.html", {"message": "Log in to validate your order"})
 
 def get_order(request):
-    pizza_form = PizzaForm()
+    pizza_form = PizzaForm({'pizza_type':'R','pizza_size':'S'})
     salad_form = SaladForm()
     pasta_form = PastaForm()
     return render(request, 'orders/order.html',

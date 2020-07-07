@@ -48,12 +48,12 @@ def cart(request):
     """This function takes to cart page"""
     if request.user.is_authenticated:
         order, created = Order.objects.get_or_create(client=request.user,payment_status=False) #TODO doit-on garder ces create ?
-        context = {"order":order,
+        context = {"order":order.all_food(),
         "price": compute_price(order)}
     else:
         if 'order_id' in request.session:
             order = Order.objects.get(pk=request.session['order_id'])
-            context = {"order":order,
+            context = {"order":order.all_food(),
             "price": compute_price(order)}
         else:
             context = {"order":"No order yet",

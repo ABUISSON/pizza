@@ -149,6 +149,20 @@ class Order(models.Model):
         n_pla = self.plates.count()
         return n_piz+n_sub+n_pas+n_sal+n_pla
 
+    def all_food(self):
+        all_food = []
+        for p in self.pizzas.all():
+            all_food.append(str(p))
+        for p in self.subs.all():
+            all_food.append(str(p))
+        for p in self.pastas.all():
+            all_food.append(str(p))
+        for p in self.salads.all():
+            all_food.append(str(p))
+        for p in self.plates.all():
+            all_food.append(str(p))
+        return all_food
+
     def __str__(self):
         pizz_str = ", ".join(str(p) for p in self.pizzas.all())
         subs_str = ", ".join(str(p) for p in self.subs.all())

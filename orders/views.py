@@ -164,9 +164,12 @@ def validate(request):
 
 def monitor(request):
     """Function to view admin monitoring"""
-    #IMPLEMENTER: checkez si la personne est logged en tant qu'admin
-    pending = Order.objects.filter(payment_status=True,delivered_status=False)
-    return render(request,'orders/admin.html',{"orders":pending})
+    #TODO: checkez si la personne est logged en tant qu'admin
+    pending = Order.objects.filter(payment_status=True,delivered_status=False).all()
+    orders = []
+    for o in pending:
+        orders.append({"order":o,"food":o.all_food()})
+    return render(request,'orders/admin.html',{"orders":orders})
 
 def done(request,pk):
     """ Function to set orders to completed """
@@ -175,4 +178,8 @@ def done(request,pk):
         order.delivered_status = True
         order.save()
     pending = Order.objects.filter(payment_status=True,delivered_status=False)
-    return render(request,'orders/admin.html',{"orders":pending})
+    pending = Order.objects.filter(payment_status=True,delivered_status=False).all()
+    orders = []
+    for o in pending:
+        orders.append({"order":o,"food":o.all_food()})
+    return render(request,'orders/admin.html',{"orders":orders})

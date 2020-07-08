@@ -3,9 +3,25 @@
 {% block title %}Your space{% endblock %}
 
 {% block content %}
-<h1>Hello, {{ user.first_name }}</h1>
-<ul>
-    <li>Currently logged in as: {{ user.username }}</li>
-    <li><a href="{% url 'logout' %}">Logout</a></li>
-</ul>
+<div class="container">
+  <div class="fond">
+    <div class="row">
+      <div class="col md-12">
+        <h4 class="menu_title">Hello {{ user.username }},</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-12">
+        You are currently logged in as: {{ user.username }}
+        <br>
+        #TODO : afficher pending orders
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-12 text-center">
+        <a href="{% url 'logout' %}" class="try_it">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

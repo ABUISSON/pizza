@@ -4,7 +4,7 @@ def get_cart_size(request):
     n_cart=0
     if request.user.is_authenticated:
         if Order.objects.filter(client=request.user,payment_status=False).count()>0:
-            o = Order.objects.get(client=request.user,payment_status=False) #TODO: tester que tout se passe bien
+            o = Order.objects.filter(client=request.user,payment_status=False).first() #TODO: pose des problèmes quand il y en a plusieurs
             cart_isfull = True
             n_cart = o.get_order_size()
         else:

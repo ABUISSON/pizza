@@ -2,9 +2,24 @@
 
 {% block title %}Thank you!{% endblock %}
 {% block content %}
-<h1>Thank you!</h1>
-<div class="">
-  Thank you {{ client }} ! Your order is on the way :)
-  <a href="/">Retour</a>
+<div class="container">
+  <div class="fond">
+  <div class="row">
+    <div class="col md-12">
+      <h4 class="menu_title">Thank you!</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col md-12">
+      Thank you {{ client }} ! Your order is on the way :)
+    </div>
+  </div>
+  <div class="row">
+    <div class="col md-12 cart-option">
+      <a href="/">Back to main page</a>
+    </div>
+  </div>
+
+</div>
 </div>
 {% endblock %}

@@ -2,14 +2,28 @@
 
 {% block title %}Payment{% endblock %}
 {% block content %}
-<h1>Pinocchio’s Pizza</h1>
-<div class="">
-  Please enter here your banking details.
-</div>
-<div class="">
-  Total amount charged : ${{ price }}
-</div>
-<div class="">
-  <a href="/validate_payment">Validate Payment</a>
+<div class="container">
+  <div class="fond">
+    <div class="row">
+      <div class="col md-12">
+        <h4 class="menu_title">You're one step before a memorable gourmet journey </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-12 price">
+        Total amount charged : ${{ price }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-12">
+        INSERER BANKING DETAILS STRIPE
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-12 cart-option">
+        <a href="/validate_payment">Validate Payment</a>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

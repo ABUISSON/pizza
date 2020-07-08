@@ -262,3 +262,41 @@ body {
   font-weight: 600;
   margin: 25px;
 }
+
+/* login */
+
+.login_btn {
+	box-shadow: 3px 4px 9px 0px #8a2a21;
+	/* background:linear-gradient(to bottom, var(--dark-red-color) 5%, #f24437 100%); */
+	background-color:#C64646;
+	border-radius:9px;
+	border:1px solid var(--dark-red-color);
+	display:inline-block;
+	cursor:pointer;
+	color:var(--beige-color);
+	font-family:'Raleway';
+	font-size:15px;
+	padding:6px 20px;
+	text-decoration:none;
+	text-shadow:0px 0px 0px #810e05;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.login_btn:hover {
+	background:linear-gradient(to bottom, #C64646 5%, var(--dark-red-color) 100%);
+	background-color:var(--dark-red-color);
+  color:var(--beige-color);
+}
+.login_btn:active {
+	position:relative;
+	top:1px;
+}
+
+.login_form{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius:5px;
+  border:1px solid var(--dark-red-color);
+  font-family:'Raleway';
+}

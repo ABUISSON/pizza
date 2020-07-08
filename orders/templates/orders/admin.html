@@ -2,15 +2,34 @@
 
 {% block title %}Admin{% endblock %}
 {% block content %}
-<h1>Admin view</h1>
-<ul>
-  {% for order in orders%}
-    <li>{{ order }}</li>
-    <form action="{% url 'orders:done' order.pk %}" method="post">
-      {% csrf_token %}
-      <input type="submit" value="Mark as completed">
-    </form>
-  {% endfor %}
-</ul>
-</body>
+<div class="container">
+  <div class="fond">
+    <div class="row">
+      <div class="col md-12">
+        <h4 class="menu_title">Pending orders</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-12">
+        <ul>
+          {% for o in orders %}
+          <li>{{o.order.client}}:
+          <ul>
+            {% for p in o.food %}
+            <li>{{ p }}</li>
+            {% endfor %}
+          </ul>
+          <form action="{% url 'orders:done' o.order.pk %}" method="post">
+            {% csrf_token %}
+            <input class="try_it" type="submit" value="Mark as completed">
+          </form>
+          </li>
+          <br>
+          <br>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

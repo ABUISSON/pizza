@@ -9,4 +9,4 @@ TODO :
 - empêcher doublons de plats avec prix différents
 - retirer élément du cart
 - Comment s'assurer qu'il y a bien qu'un order pas payée par personne ? (-_> unique together)
-- rendre persistant le dernier onglet visité avec le local storage
+- ajouter favicon

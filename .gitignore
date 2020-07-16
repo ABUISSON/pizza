@@ -4,3 +4,4 @@ __pycache__
 Dockerfile
 heroku.yml
 docker-compose.yml
+secrets.json

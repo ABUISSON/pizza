@@ -1,20 +1,35 @@
-from orders.models import PizzaPrice, Sub_addon, Sub, Pasta, Salad, Plate
-
-#I added toppings manually
+from orders.models import Topping, PizzaPrice, Sub_addon, Sub_main, Pasta, Salad, Plate
 
 ############
-## SUBS ###
+## Pizza ###
 ############
 
-# addons_list=['Mushrooms', 'Green Peppers', 'Onions', 'Extra Cheese']
-# for type in addons_list:
-#     a = Sub_addon(type=type, price=0.5)
-#     a.save()
+toppings = ['Pepperoni','Sausage','Mushrooms','Onions','Ham','Canadian Bacon','Pineapple','Eggplant','Tomato & Basil', 'Green Peppers','Hamburger','Spinach','Artichoke','Buffalo Chicken','Barvecue Chicken','Anchovies','Black Olives','Fresh Garlic','Zucchini']
+for t in toppings:
+    a = Topping(type=t)
+    a.save()
 
-sub_mains=["Cheese","Italian","Ham + Cheese","Meatball","Tuna","Turkey","Chicken Parmigiana","Eggplant Parmigiana","Steak","Steak + Cheese","Sausage, Peppers & Onions","Hamburger","Cheeseburger","Fried Chicken","Veggie"]
+prices_list = [('R','S',0,12.70),('R','S',1,13.70),('R','S',2,15.20),('R','S',3,16.20),('R','S',4,17.75),('R','L',0,17.95),('R','L',1,19.95),('R','L',2,21.95),('R','L',3,23.95),('R','L',4,25.95),('S','S',0,24.45),('S','S',1,26.45),('S','S',2,28.45),('S','S',3,29.45),('S','S',4,30.45),('S','L',0,38.70),('S','L',1,40.70),('S','L',2,42.70),('S','L',3,44.7),('S','L',4,45.70)]
 
-for main in sub_mains:
-    a = Sub(main=main, size='S')
+for e in prices_list:
+    type, size, n_tops, price = e
+    a = PizzaPrice(pizza_type=type,pizza_size=size,n_tops=n_tops,price=price)
+    a.save()
+
+# ############
+# ## SUBS ###
+# ############
+
+addons_list=['Mushrooms', 'Green Peppers', 'Onions', 'Extra Cheese']
+for type in addons_list:
+    a = Sub_addon(type=type, price=0.5)
+    a.save()
+
+subs = [("Cheese",6.50,7.95),("Italian",6.50,7.95),("Ham + Cheese",6.50,7.95),("Meatball",6.50,7.95),("Tuna",6.50,7.95),("Turkey",7.50,8.50),("Chicken Parmigiana",7.50,8.50),("Eggplant Parmigiana",6.50,7.95),("Steak",6.50,7.95),("Steak + Cheese",6.95,8.50),("Sausage, Peppers & Onions",0,8.50),("Hamburger",4.60,6.95),("Cheeseburger",5.10,7.45),("Fried Chicken",6.95,8.50),("Veggie",6.95,8.50)]
+
+for sub in subs:
+    name, price_s, price_l = sub
+    a = Sub_main(name=name,price_s=price_s,price_l=price_l)
     a.save()
 
 ############

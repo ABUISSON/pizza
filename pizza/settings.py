@@ -77,14 +77,25 @@ WSGI_APPLICATION = 'pizza.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-#TODO : set remote (aws?)
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd6l2hbqt0v078e',
+        'USER': 'gdptdxasyjjcuf',
+        'PASSWORD': '15e52c2e13e7678d17e9e2856c488ba6579852870d8d9392f0bd106ad2bd5ca2',
+        'HOST': 'ec2-46-137-79-235.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432'
     }
 }
-
+#TODO : hide password os.getenv('')
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

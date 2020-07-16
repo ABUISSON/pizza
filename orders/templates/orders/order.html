@@ -60,9 +60,36 @@
     </div>
 
     <div id="Subs" class="Menucontent">
-      <h3>Subs</h3>
-
+      <form action="/order_sub" method="post">
+        {% csrf_token %}
+        {{ sub_form.non_field_errors }}
+        <div class="row">
+          <div class="col-md-4 fieldWrapper">
+              {{ sub_form.sub_main.errors }}
+              <label for="{{ sub_form.sub_main.id_for_label }}">Sub type:</label>
+              {{ sub_form.sub_main }}
+          </div>
+          <div class="col-md-4 fieldWrapper">
+              {{ sub_form.sub_size.errors }}
+              <label for="{{ sub_form.sub_size.id_for_label }}">Sub size:</label>
+              {{ sub_form.sub_size }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="fieldWrapper">
+              {{ sub_form.toppings.errors }}
+              <label for="{{ sub_form.toppings.id_for_label }}">Choix de toppings: </label>
+              {{ sub_form.toppings }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <input class="try_it" type="submit" value="Add to cart">
+          </div>
+        </div>
+      </form>
     </div>
+
 
 <div id="Pasta" class="Menucontent">
   <h3>Pasta</h3>

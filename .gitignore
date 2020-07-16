@@ -1,3 +1,6 @@
 *.pyc
 db.sqlite3
 __pycache__
+Dockerfile
+heroku.yml
+docker-compose.yml

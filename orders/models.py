@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.shortcuts import get_object_or_404
 
 # Create your models here.
 
@@ -70,7 +70,6 @@ class Sub(models.Model):
     main = models.ForeignKey(Sub_main, on_delete=models.CASCADE)
     size = models.CharField(max_length=1, choices=SUB_SIZES)
     addons = models.ManyToManyField(Sub_addon, blank=True)
-
     def get_price(self):
         """
         Obtaning the price of the Sub object based on the main sub and
@@ -78,15 +77,15 @@ class Sub(models.Model):
         """
         price_main = get_object_or_404(Sub_main, name=self.main.name)
         if self.size == 'S':
-            price = price_main['S']
+            price = price_main.price_s
         else:
-            price = price_main['L']
+            price = price_main.price_l
         # TODO checker que l'object price contient price_s et price_l ?
         for addon in self.addons.all():
             temp = get_object_or_404(Sub_addon, type=addon.type)
-            price += temp['price']
+            price += temp.price
         return price
-        
+
     def __str__(self):
         addons_str=""
         for e in self.addons.all():

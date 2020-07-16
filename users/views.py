@@ -21,10 +21,12 @@ def login_view(request):
   if user is not None:
       login(request, user)
       if 'order_id' in request.session:
+          Order.objects.filter(client=user, payment_status=False).delete() # Deleting existing pending order for user
           pk = request.session['order_id']
           order = Order.objects.get(pk=pk)
           order.client = request.user
           order.save()
+
           if 'order_finished' in request.session:
               return HttpResponseRedirect("cart")
       return HttpResponseRedirect(reverse("index"))

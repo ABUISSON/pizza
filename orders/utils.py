@@ -14,6 +14,8 @@ def compute_price(order):
         price += float(salad.price)
     for pasta in order.pastas.all():
         price += float(pasta.price)
+    for sub in order.subs.all():
+        price += float(sub.get_price())
     return price
 
 # TODO mettre celle ci en méthode dans Pizza

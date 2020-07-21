@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import permission_required
 
 from .utils import compute_price, get_unique
 from .forms import PizzaForm, SaladForm, PastaForm
@@ -56,7 +57,7 @@ def cart(request):
             context = {"order":order.all_food(),
             "price": compute_price(order)}
         else:
-            context = {"order":"No order yet",
+            context = {"order":["No order yet"],
                         "price":0}
     return render(request, "orders/cart.html", context)
 
@@ -107,7 +108,7 @@ def order_pizza(request):
         else:
             pass #TODO
     else:
-        logger.warning("Error") #TODO
+        logger.warning("Error") #TODO ajouter page erreur
 
 def order_salad(request):
     logger.warning("I am here")
@@ -161,10 +162,11 @@ def validate(request):
     order.save()
     return render(request,'orders/thankyou.html',{"client": request.user})
 
-
+@permission_required('orders.see_monitor', raise_exception=True)
 def monitor(request):
     """Function to view admin monitoring"""
     #TODO: checkez si la personne est logged en tant qu'admin
+    #TODO : ajouter aux tests
     pending = Order.objects.filter(payment_status=True,delivered_status=False).all()
     orders = []
     for o in pending:

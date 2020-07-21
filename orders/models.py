@@ -2,8 +2,19 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+class RightsSupport(models.Model):
+    class Meta:
+        managed = False  # No database table creation or deletion  \
+                         # operations will be performed for this model.
 
-# Create your models here.
+        default_permissions = () # disable "add", "change", "delete"
+                                 # and "view" default permissions
+
+        permissions = (
+            ('see_monitor', 'STAFF rights to monitor'),
+            ('client', 'Client rights')
+        )
+
 
 ############
 ## PIZZA ###
@@ -70,7 +81,7 @@ class Sub(models.Model):
     main = models.ForeignKey(Sub_main, on_delete=models.CASCADE)
     size = models.CharField(max_length=1, choices=SUB_SIZES)
     addons = models.ManyToManyField(Sub_addon, blank=True)
-    price = models.DecimalField(max_digits=6,decimal_places=2,default=0)
+    #price = models.DecimalField(max_digits=6,decimal_places=2,default=0)
     def __str__(self):
         return f"{self.main}"
 

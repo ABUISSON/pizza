@@ -2,7 +2,6 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 
-from .utils import compute_price, get_unique
 from .forms import PizzaForm, SaladForm, PastaForm, SubForm
 from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, SaladOrder, PizzaPrice, PastaOrder
 
@@ -50,12 +49,12 @@ def cart(request):
     if request.user.is_authenticated:
         order, created = Order.objects.get_or_create(client=request.user,payment_status=False) #TODO doit-on garder ces create ?
         context = {"order":order.all_food(),
-        "price": compute_price(order)}
+        "price": order.compute_price()}
     else:
         if 'order_id' in request.session:
             order = Order.objects.get(pk=request.session['order_id'])
             context = {"order":order.all_food(),
-            "price": compute_price(order)}
+            "price": order.compute_price()}
         else:
             context = {"order":["No order yet"],
                         "price":0}

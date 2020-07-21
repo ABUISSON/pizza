@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 
 from .utils import compute_price, get_unique
-from .forms import PizzaForm, SaladForm, PastaForm
+from .forms import PizzaForm, SaladForm, PastaForm, SubForm
 from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, SaladOrder, PizzaPrice, PastaOrder
 
 import logging
@@ -74,9 +74,10 @@ def get_order(request):
     pizza_form = PizzaForm({'pizza_type':'R','pizza_size':'S'})
     salad_form = SaladForm()
     pasta_form = PastaForm()
+    sub_form = SubForm()
     return render(request, 'orders/order.html',
             {'pizza_form': pizza_form, 'salad_form': salad_form,
-             'pasta_form': pasta_form})
+             'pasta_form': pasta_form, 'sub_form':sub_form})
 
 def order_pizza(request):
     if request.method == 'POST':
@@ -132,6 +133,7 @@ def order_salad(request):
         return render(request, 'orders/error.html') #TODO
 
 def order_pasta(request):
+    # TODO: gérer quand on est pas loggé.
     logger.warning("I am in order_pasta")
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -146,6 +148,40 @@ def order_pasta(request):
             order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
             p = PastaOrder(pasta=pasta_form.cleaned_data["pasta_type"], order=order)
             p.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('cart')
+    else:
+        return render(request, 'orders/error.html') #TODO
+
+def order_sub(request):
+    logger.warning("I am in order_sub")
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        sub_form = SubForm(request.POST)
+        # check whether it's valid:
+        if sub_form.is_valid():
+            logger.warning(sub_form.cleaned_data["sub_main"])
+            # process the data in form.cleaned_data as required
+            sub = Sub.objects.create(main=sub_form.cleaned_data['sub_main'],
+                                     size=sub_form.cleaned_data['sub_size'])
+            for top in sub_form.cleaned_data["toppings"]:
+                top_obj = Sub_addon.objects.get(type=top)
+                sub.addons.add(top_obj)
+            sub.save()
+
+            #add to order or create
+            if request.user.is_authenticated:
+                order, created = Order.objects.get_or_create(
+                                    client=request.user,payment_status=False)
+            else:
+                if 'order_id' in request.session:
+                    pk = request.session['order_id']
+                    order = Order.objects.get(pk=pk)
+                else:
+                    order = Order(payment_status=False)
+                    order.save()
+                    request.session['order_id']=order.pk
+            order.subs.add(sub)
             # redirect to a new URL:
             return HttpResponseRedirect('cart')
     else:

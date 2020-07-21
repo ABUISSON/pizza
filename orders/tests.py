@@ -29,8 +29,7 @@ class OrderTestCase(TestCase):
 
     def test_pizza_price(self):
         p = Pizza.objects.get(pizza_type='S',pizza_size='L')
-        p_price = PizzaPrice.objects.get(pizza_type='S',pizza_size='L')
-        self.assertEqual(p_price.price,30)
+        self.assertEqual(p.get_price(),30)
 
     def test_order_size(self):
         o = Order.objects.get(payment_status=False,delivered_status=False)
@@ -41,3 +40,7 @@ class OrderTestCase(TestCase):
         p1 = Pizza.objects.get(pizza_type='R',pizza_size='S')
         p2 = Pizza.objects.get(pizza_type='S',pizza_size='L')
         self.assertEqual(o.all_food(), [str(p1),str(p2)])
+
+    def test_order_price(self):
+        o = Order.objects.get(payment_status=False,delivered_status=False)
+        self.assertEqual(o.compute_price(),35)

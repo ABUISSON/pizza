@@ -39,6 +39,12 @@ class Pizza(models.Model):
     pizza_type = models.CharField(max_length=1, choices=PIZZA_TYPES)
     pizza_size = models.CharField(max_length=1, choices=PIZZA_SIZES)
     toppings = models.ManyToManyField(Topping, blank=True)
+
+    def get_price(self):
+        k = min(4,len(self.toppings.all()))
+        price_obj = get_object_or_404(PizzaPrice, pizza_type=self.pizza_type,pizza_size=self.pizza_size,n_tops=k)
+        return price_obj.price
+
     def __str__(self):
         top_str=""
         for e in self.toppings.all():
@@ -193,6 +199,18 @@ class Order(models.Model):
         for p in self.plates.all():
             all_food.append(str(p))
         return all_food
+
+    def compute_price(self):
+        price = 0
+        for pizza in self.pizzas.all():
+            price += float(pizza.get_price())
+        for salad in self.salads.all():
+            price += float(salad.price)
+        for pasta in self.pastas.all():
+            price += float(pasta.price)
+        for sub in self.subs.all():
+            price += float(sub.get_price())
+        return price
 
     def __str__(self):
         pizz_str = ", ".join(str(p) for p in self.pizzas.all())

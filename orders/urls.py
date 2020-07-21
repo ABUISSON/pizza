@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -17,5 +17,5 @@ urlpatterns = [
     path("order_salad", views.order_salad, name="order_salad"),
     path("order_pasta", views.order_pasta, name="order_pasta"),
     path("order_sub", views.order_sub, name="order_sub"),
-    path(r'^done/(?P<pk>[0-9]+)/$', views.done, name='done')
+    re_path(r'^done/(?P<pk>[0-9]+)/$', views.done, name='done')
 ]

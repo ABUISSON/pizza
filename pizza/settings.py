@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-import os
+import os, sys
 import django_heroku
-import os
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -80,24 +79,39 @@ WSGI_APPLICATION = 'pizza.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd6l2hbqt0v078e',
-        'USER': 'gdptdxasyjjcuf',
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': 'ec2-46-137-79-235.eu-west-1.compute.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
+if 'test' in sys.argv:
+    #test database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd7ickr71bdko9h',
+            'USER': 'toglbzfsjmzfcl',
+            'PASSWORD': os.getenv('TEST_DB_PASSWORD'),
+            'HOST': 'ec2-54-217-206-236.eu-west-1.compute.amazonaws.com',
+            'PORT': '5432',
+            'TEST': {
+                'NAME': 'd7ickr71bdko9h', #This is an important entry
+            }
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd6l2hbqt0v078e',
+            'USER': 'gdptdxasyjjcuf',
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': 'ec2-46-137-79-235.eu-west-1.compute.amazonaws.com',
+            'PORT': '5432'
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 

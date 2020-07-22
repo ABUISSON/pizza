@@ -2,8 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 
-from .forms import PizzaForm, SaladForm, PastaForm, SubForm
-from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, SaladOrder, PizzaPrice, PastaOrder
+from .forms import PizzaForm, SaladForm, PastaForm, SubForm, PlateForm
+from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, Plate, PlateOrder, SaladOrder, PizzaPrice, PastaOrder
 
 import logging
 
@@ -30,7 +30,14 @@ def menu(request):
               p = PizzaPrice.objects.get(pizza_type='S',pizza_size=size,n_tops=n_tops).price
               #TODO ajouter des choses pour vérifier que ça se passe bien
               sicilian_prices[n_tops].append(p)
-
+    # plates
+    plates_prices = {}
+    plate_type = [str(el.type) for el in Plate.objects.exclude(size='L')]
+    for el in plate_type:
+        plates_prices[el] = []
+        for size in ['S', 'L']:
+            p = Plate.objects.get(type=el, size=size).price
+            plates_prices[el].append(p)
     context = {"Pastas":Pasta.objects.all(),
                 'Pizza_header':['', 'Small','Large'],
                 'R_rows':regular_prices,
@@ -38,7 +45,8 @@ def menu(request):
                 "Salads":Salad.objects.all(),
                 "Subs": Sub_main.objects.all(),
                 "Sub_addons":Sub_addon.objects.all(),
-                "Toppings": Topping.objects.all()}
+                "Toppings": Topping.objects.all(),
+                "Plate_prices": plates_prices}
     return render(request, "orders/menu.html",context)
 
 def info(request):
@@ -74,9 +82,11 @@ def get_order(request):
     salad_form = SaladForm()
     pasta_form = PastaForm()
     sub_form = SubForm()
+    plate_form = PlateForm()
     return render(request, 'orders/order.html',
             {'pizza_form': pizza_form, 'salad_form': salad_form,
-             'pasta_form': pasta_form, 'sub_form':sub_form})
+             'pasta_form': pasta_form, 'sub_form':sub_form,
+             'plate_form': plate_form})
 
 def order_pizza(request):
     if request.method == 'POST':
@@ -108,22 +118,30 @@ def order_pizza(request):
         else:
             pass #TODO
     else:
-        logger.warning("Error") #TODO ajouter page erreur
+        return render(request, 'orders/error.html') #TODO ajouter page erreur
 
 def order_salad(request):
-    logger.warning("I am here")
+    logger.warning("I am in salad")
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         salad_form = SaladForm(request.POST)
-        logger.warning("there")
         # check whether it's valid:
         if salad_form.is_valid():
             logger.warning(salad_form.cleaned_data["salad_type"])
             # process the data in form.cleaned_data as required
-            #salad =  #Salad.objects.get(type=salad_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
             #add to order or create
-            order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
-            #order.salads.add(salad_form.cleaned_data["salad_type"])
+            if request.user.is_authenticated:
+                order, created = Order.objects.get_or_create(
+                                    client=request.user,payment_status=False)
+            else:
+                if 'order_id' in request.session:
+                    pk = request.session['order_id']
+                    order = Order.objects.get(pk=pk)
+                else:
+                    order = Order(payment_status=False)
+                    order.save()
+                    request.session['order_id']=order.pk
+
             s = SaladOrder(salad=salad_form.cleaned_data["salad_type"], order=order)
             s.save()
             # redirect to a new URL:
@@ -142,9 +160,17 @@ def order_pasta(request):
         if pasta_form.is_valid():
             logger.warning(pasta_form.cleaned_data["pasta_type"])
             # process the data in form.cleaned_data as required
-            #salad =  #Salad.objects.get(type=salad_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
-            #add to order or create
-            order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
+            if request.user.is_authenticated:
+                order, created = Order.objects.get_or_create(
+                                    client=request.user,payment_status=False)
+            else:
+                if 'order_id' in request.session:
+                    pk = request.session['order_id']
+                    order = Order.objects.get(pk=pk)
+                else:
+                    order = Order(payment_status=False)
+                    order.save()
+                    request.session['order_id']=order.pk
             p = PastaOrder(pasta=pasta_form.cleaned_data["pasta_type"], order=order)
             p.save()
             # redirect to a new URL:
@@ -167,7 +193,6 @@ def order_sub(request):
                 top_obj = Sub_addon.objects.get(type=top)
                 sub.addons.add(top_obj)
             sub.save()
-
             #add to order or create
             if request.user.is_authenticated:
                 order, created = Order.objects.get_or_create(
@@ -186,6 +211,37 @@ def order_sub(request):
     else:
         return render(request, 'orders/error.html') #TODO
 
+def order_plate(request):
+    logger.warning("I am in order_plate")
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        plate_form = PlateForm(request.POST)
+        # check whether it's valid:
+        if plate_form.is_valid():
+            logger.warning(plate_form.cleaned_data["type"])
+            # process the data in form.cleaned_data as required
+            plate = Plate.objects.get(type=plate_form.cleaned_data["type"],
+                            size = plate_form.cleaned_data['plate_size'])
+
+            #add to order or create
+            if request.user.is_authenticated:
+                order, created = Order.objects.get_or_create(
+                                    client=request.user,payment_status=False)
+            else:
+                if 'order_id' in request.session:
+                    pk = request.session['order_id']
+                    order = Order.objects.get(pk=pk)
+                else:
+                    order = Order(payment_status=False)
+                    order.save()
+                    request.session['order_id']=order.pk
+
+            plate_order = PlateOrder(plate=plate, order=order)
+            plate_order.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('cart')
+    else:
+        return render(request, 'orders/error.html') #TODO
 
 def validate(request):
     """This function take to thank you page"""

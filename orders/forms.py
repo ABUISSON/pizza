@@ -1,5 +1,5 @@
 from django import forms
-from .models import Topping, Salad, Pasta, Sub_main, Sub_addon
+from .models import Topping, Salad, Pasta, Sub_main, Sub_addon, Plate
 
 PIZZA_TYPES = (
 ('R','Regular'),
@@ -12,6 +12,11 @@ PIZZA_SIZES = (
 )
 
 SUB_SIZES = (
+('S','Small'),
+('L','Large')
+)
+
+PLATE_SIZES = (
 ('S','Small'),
 ('L','Large')
 )
@@ -34,3 +39,7 @@ class SubForm(forms.Form):
                 label="Sub Type")
     sub_size = forms.ChoiceField(choices=SUB_SIZES, widget=forms.RadioSelect, label="Sub Size")
     toppings = forms.ModelMultipleChoiceField(queryset = Sub_addon.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
+
+class PlateForm(forms.Form):
+    type = forms.ModelChoiceField(queryset=Plate.objects.exclude(size='L'), label = "Plate Type")
+    plate_size = forms.ChoiceField(choices= PLATE_SIZES, widget=forms.RadioSelect, label="Plate Size")

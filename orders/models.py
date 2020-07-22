@@ -99,7 +99,6 @@ class Sub(models.Model):
             price = price_main.price_s
         else:
             price = price_main.price_l
-        # TODO checker que l'object price contient price_s et price_l ?
         for addon in self.addons.all():
             temp = get_object_or_404(Sub_addon, type=addon.type)
             price += temp.price
@@ -158,10 +157,19 @@ PLATE_SIZES = (
 )
 
 class Plate(models.Model):
-    type = models.CharField(max_length=64, unique=True)
+    type = models.CharField(max_length=64, unique=False)
     size = models.CharField(max_length=1, choices=PLATE_SIZES)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default = -1.00)
     def __str__(self):
         return f"{self.type}"
+    class Meta:
+        unique_together = ["type", "size"]
+
+class PlateOrder(models.Model):
+    plate = models.ForeignKey(Plate, on_delete=models.CASCADE)
+    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.plate}"
 
 ############
 ## GENERAL #
@@ -174,7 +182,7 @@ class Order(models.Model):
     subs = models.ManyToManyField(Sub)
     pastas = models.ManyToManyField(Pasta, through=PastaOrder)
     salads = models.ManyToManyField(Salad, through=SaladOrder)
-    plates = models.ManyToManyField(Plate)
+    plates = models.ManyToManyField(Plate, through=PlateOrder)
     payment_status = models.BooleanField(default=False)
     delivered_status = models.BooleanField(default=False)
 
@@ -210,6 +218,8 @@ class Order(models.Model):
             price += float(pasta.price)
         for sub in self.subs.all():
             price += float(sub.get_price())
+        for plate in self.plates.all():
+            price += float(plate.price)
         return price
 
     def __str__(self):

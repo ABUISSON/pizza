@@ -110,8 +110,29 @@
     </div>
 
     <div id="Platter" class="Menucontent">
-      <h3>Platter</h3>
+      <form action="/order_plate" method="post">
+        {% csrf_token %}
+        {{ plate_form.non_field_errors }}
+        <div class="row">
+          <div class="col-md-4 fieldWrapper">
+              {{ plate_form.type.errors }}
+              <label for="{{ plate_form.type.id_for_label }}">Plate type:</label>
+              {{ plate_form.type }}
+          </div>
+          <div class="col-md-4 fieldWrapper">
+              {{ plate_form.plate_size.errors }}
+              <label for="{{ plate_form.plate_size.id_for_label }}">Plate size:</label>
+              {{plate_form.plate_size}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <input class="try_it" type="submit" value="Add to cart">
+          </div>
+        </div>
+      </form>
     </div>
+
   </div>
 </div>
 {% endblock %}

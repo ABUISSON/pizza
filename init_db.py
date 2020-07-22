@@ -65,8 +65,14 @@ for type in SALADS.keys():
 ## PLATES ##
 ############
 
-plate_types = ["Garden Salad", "Greek Salad","Antipasto","Baked Ziti","Meatball Parm","Chicken Parm"]
 
-for type in plate_types:
-    p = Plate(type=type, size='S')
+plate_info = [('Garden Salad','S', 40.00), ('Garden Salad','L', 65.00),
+                ('Greek Salad', 'S', 50.00), ('Greek Salad', 'L', 75.00),
+                ('Antipasto', 'S', 50.00), ('Antipasto', 'L', 75.00),
+                ('Baked Ziti', 'S', 40.00), ('Baked Ziti', 'L', 65.00),
+                ('Meatball Parm', 'S', 50.00), ('Meatball Parm', 'L', 75.00),
+                ('Chicken Parm', 'S', 55.00), ('Chicken Parm', 'L', 85.00)]
+
+for plate_type, plate_size, plate_price in plate_info:
+    p = Plate(type=plate_type, size=plate_size, price=plate_price)
     p.save()

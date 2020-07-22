@@ -16,9 +16,26 @@
     </div>
     <div class="row">
       <div class="col md-12">
-        INSERER BANKING DETAILS STRIPE
+        <form id="payment-form" class="sr-payment-form">
+          {% csrf_token %}
+          <div class="sr-combo-inputs-row">
+            <div class="sr-input sr-card-element" id="card-element"></div>
+          </div>
+          <div class="sr-field-error" id="card-errors" role="alert"></div>
+          <button id="submit" class="btn">
+            <div class="spinner-border  spinner-border-sm text-light hidden" id="spinner" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <span class="try_it" id="button-text">Pay</span><span id="order-amount"></span>
+          </button>
+        </form>
       </div>
     </div>
+    <form id="payload" class="hidden" action="/payment-complete" method="post">
+      {% csrf_token %}
+      <input id ="data-payload" type="hidden" name="payload"/>
+    </form>
+
     <div class="row">
       <div class="col md-12 cart-option">
         <a href="/validate_payment">Validate Payment</a>

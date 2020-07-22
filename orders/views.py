@@ -1,6 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import permission_required
+from django.views.decorators.csrf import csrf_exempt
+
+import stripe, json, os
 
 from .forms import PizzaForm, SaladForm, PastaForm, SubForm
 from .models import Topping, Pizza, Order, Pasta, Salad, Sub, Sub_main, Sub_addon, SaladOrder, PizzaPrice, PastaOrder
@@ -60,10 +63,25 @@ def cart(request):
                         "price":0}
     return render(request, "orders/cart.html", context)
 
+@csrf_exempt
 def pay(request):
     """This function takes to payment page"""
     if request.user.is_authenticated:
-        context = {"price":request.GET.get('price')}
+        order, created = Order.objects.get_or_create(client=request.user,payment_status=False) #TODO doit-on garder ces create ?
+        price = order.compute_price()
+        total = price*100
+        stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+
+        if request.method=="POST":
+            data = json.loads(request.body)
+    		# Create a PaymentIntent with the order amount and currency
+            intent = stripe.PaymentIntent.create(amount=total,currency=data['currency'],metadata={'integration_check': 'accept_a_payment'})
+            try:
+                return JsonResponse({'publishableKey':'pk_test_51H7MFmJ9TdZe0RKLQU9wgJC4L2z6wXFeqBdVSg8FBFYP0fk1U6psdOiKIcP73AWet5r5E5BncQhduK7LDYeBZzuM00QT3CchJ0', 'clientSecret': intent.client_secret})
+            except Exception as e:
+                return JsonResponse({'error':str(e)},status= 403)
+
+        context = {"price": price}
         return render(request, "orders/payment.html", context)
     else:
         request.session['order_finished'] = True

@@ -110,22 +110,30 @@ def order_pizza(request):
         else:
             pass #TODO
     else:
-        logger.warning("Error") #TODO ajouter page erreur
+        return render(request, 'orders/error.html') #TODO ajouter page erreur
 
 def order_salad(request):
     logger.warning("I am in salad")
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         salad_form = SaladForm(request.POST)
-        logger.warning("there")
         # check whether it's valid:
         if salad_form.is_valid():
             logger.warning(salad_form.cleaned_data["salad_type"])
             # process the data in form.cleaned_data as required
-            #salad =  #Salad.objects.get(type=salad_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
             #add to order or create
-            order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
-            #order.salads.add(salad_form.cleaned_data["salad_type"])
+            if request.user.is_authenticated:
+                order, created = Order.objects.get_or_create(
+                                    client=request.user,payment_status=False)
+            else:
+                if 'order_id' in request.session:
+                    pk = request.session['order_id']
+                    order = Order.objects.get(pk=pk)
+                else:
+                    order = Order(payment_status=False)
+                    order.save()
+                    request.session['order_id']=order.pk
+
             s = SaladOrder(salad=salad_form.cleaned_data["salad_type"], order=order)
             s.save()
             # redirect to a new URL:
@@ -144,9 +152,17 @@ def order_pasta(request):
         if pasta_form.is_valid():
             logger.warning(pasta_form.cleaned_data["pasta_type"])
             # process the data in form.cleaned_data as required
-            #salad =  #Salad.objects.get(type=salad_form.cleaned_data['pizza_type'],pizza_size=pizza_form.cleaned_data['pizza_size'])
-            #add to order or create
-            order, created = Order.objects.get_or_create(client=request.user,payment_status=False)
+            if request.user.is_authenticated:
+                order, created = Order.objects.get_or_create(
+                                    client=request.user,payment_status=False)
+            else:
+                if 'order_id' in request.session:
+                    pk = request.session['order_id']
+                    order = Order.objects.get(pk=pk)
+                else:
+                    order = Order(payment_status=False)
+                    order.save()
+                    request.session['order_id']=order.pk
             p = PastaOrder(pasta=pasta_form.cleaned_data["pasta_type"], order=order)
             p.save()
             # redirect to a new URL:
@@ -169,7 +185,6 @@ def order_sub(request):
                 top_obj = Sub_addon.objects.get(type=top)
                 sub.addons.add(top_obj)
             sub.save()
-
             #add to order or create
             if request.user.is_authenticated:
                 order, created = Order.objects.get_or_create(

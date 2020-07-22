@@ -41,5 +41,5 @@ class SubForm(forms.Form):
     toppings = forms.ModelMultipleChoiceField(queryset = Sub_addon.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
 
 class PlateForm(forms.Form):
-    type = forms.ModelChoiceField(queryset=Plate.objects.all(), label = "Plate Type")
+    type = forms.ModelChoiceField(queryset=Plate.objects.exclude(size='L'), label = "Plate Type")
     plate_size = forms.ChoiceField(choices= PLATE_SIZES, widget=forms.RadioSelect, label="Plate Size")

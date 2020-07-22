@@ -162,6 +162,8 @@ class Plate(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2, default = -1.00)
     def __str__(self):
         return f"{self.type}"
+    class Meta:
+        unique_together = ["type", "size"]
 
 class PlateOrder(models.Model):
     plate = models.ForeignKey(Plate, on_delete=models.CASCADE)

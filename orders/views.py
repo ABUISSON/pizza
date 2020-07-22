@@ -31,6 +31,20 @@ def menu(request):
               #TODO ajouter des choses pour vérifier que ça se passe bien
               sicilian_prices[n_tops].append(p)
 
+    # plates
+    plates_prices = {}
+    plate_type = [str(el.type) for el in Plate.objects.exclude(size='L')]
+    logger.warning("Test plate_type pour le menu")
+    str_test = ' '.join(plate_type)
+    logger.warning(str_test)
+    for el in plate_type:
+        plates_prices[el] = []
+        for size in ['S', 'L']:
+            p = Plate.objects.get(type=el, size=size).price
+            plates_prices[el].append(p)
+
+    logger.warning(plates_prices)
+
     context = {"Pastas":Pasta.objects.all(),
                 'Pizza_header':['', 'Small','Large'],
                 'R_rows':regular_prices,
@@ -38,7 +52,11 @@ def menu(request):
                 "Salads":Salad.objects.all(),
                 "Subs": Sub_main.objects.all(),
                 "Sub_addons":Sub_addon.objects.all(),
-                "Toppings": Topping.objects.all()}
+                "Toppings": Topping.objects.all(),
+                "Plate_prices": plates_prices}
+    logger.warning(Salad.objects.all())
+    logger.warning(sicilian_prices.items)
+    logger.warning(plates_prices.items())
     return render(request, "orders/menu.html",context)
 
 def info(request):
